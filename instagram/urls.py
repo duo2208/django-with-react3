@@ -8,5 +8,5 @@ router.urls # url pattern list
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('public/', views.PublicPostListAPIView.as_view()),
+    # path('public/', views.public_post_list),
 ]
