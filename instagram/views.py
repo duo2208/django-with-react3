@@ -1,8 +1,13 @@
 from rest_framework import generics
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+
+from instagram.permissions import IsAuthorOrReadOnly
 from .serializers import PostSerializer
 from .models import Post
 
@@ -31,6 +36,12 @@ from .models import Post
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+
+    def perform_create(self, serializer):
+        author = self.request.user  # User or AnonymousUser
+        ip = self.request.META['REMOTE_ADDR']
+        serializer.save(author=author, ip=ip)
 
     @action(detail=False, methods=['GET'])
     def public(self, request):
@@ -56,3 +67,14 @@ class PostViewSet(ModelViewSet):
 
 # def post_detail(request, pk):
     # request.method => 3개 분기
+
+class PostDetailAPIView(RetrieveAPIView):
+    queryset = Post.objects.all()
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name ='instagram/post_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        post = self.get_object()
+        return Response({
+            'post': post,
+        })

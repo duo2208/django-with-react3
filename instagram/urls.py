@@ -9,4 +9,5 @@ router.urls # url pattern list
 urlpatterns = [
     path('', include(router.urls)),
     # path('public/', views.public_post_list),
+    path('mypost/<int:pk>/', views.PostDetailAPIView.as_view()),
 ]
