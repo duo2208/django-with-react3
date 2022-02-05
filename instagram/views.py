@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from instagram.permissions import IsAuthorOrReadOnly
 from .serializers import PostSerializer
@@ -37,6 +38,8 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['message']
 
     def perform_create(self, serializer):
         author = self.request.user  # User or AnonymousUser
