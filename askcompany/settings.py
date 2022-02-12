@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
 
     'accounts',
     'instagram',
@@ -119,8 +120,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {  
     'DEFAULT_AUTHENTICATION_CLASSES' : [
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'PAGE_SIZE': 2,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -135,3 +137,7 @@ REST_FRAMEWORK = {
         'user': '10/day',
     }
  }
+
+JWT_AUTH = {
+    'JWT_ALLOE_REFRESH': True,
+}
